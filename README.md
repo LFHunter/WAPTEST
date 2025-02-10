@@ -1,4 +1,4 @@
-# Marketstack API Test Cases
+# WAPTEST Twitch 
 
 ## Overview
 This document outlines WAP testing Twitch site with selenium .
