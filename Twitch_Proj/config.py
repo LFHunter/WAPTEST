@@ -1,23 +1,40 @@
+import os
 import datetime
 now = datetime.datetime.now()
 formatted_now = now.strftime("%Y-%m-%d_%H%M_%S")
 
+# Path
+file_path = os.path.abspath(__file__)
+current_folder_path = os.path.dirname(file_path)
+current_folder_name = os.path.basename(current_folder_path)
+
+# url
+twitch_url = "https://m.twitch.tv"
+
+
+# Browser Driver
+# [Backup] when webdriver-manager couldn't install the latest chromedriver
+chrome_driver_path = r"c:/Users/paul/Desktop/openent/WAPTEST/Twitch_Proj/chromedriver.exe"
 
 driver_setting = {
-    "url" : "",
+    "url": "",
     "browser": "chrome",
-    "driver_path": "",
     "prefs": {
-        "intl.accept_languages": "en-US"  #zh-TW,zh-HK,zh-CN,ja,en-US,ko
+        "intl.accept_languages": "en-US"  # zh-TW,zh-HK,zh-CN,ja,en-US,ko
     },
-    "experimental_option":{
-        "mobileEmulation":{ "deviceName": "iPhone 12 Pro" }
+    "experimental_option": {
+        "mobileEmulation": {"deviceName": "iPhone 12 Pro"}
     },
     "arguments": [
-        "--disable-gpu"
-        #"--headless"
+        "--ignore-certificate-errors",
+        "--disable-gpu",
+        "--incognito"
+        # "--headless"
     ]
 }
+
+
+# Log
 
 log_config = {
     'version': 1,
@@ -35,7 +52,7 @@ log_config = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': f'{formatted_now}_twitch.log',
+            'filename': f'{current_folder_name}/{formatted_now}_twitch.log',
             'formatter': 'standard',
             'level': 'DEBUG'
         }

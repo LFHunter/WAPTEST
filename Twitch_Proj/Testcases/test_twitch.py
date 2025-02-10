@@ -1,20 +1,21 @@
 from Baselib.webdriver_manager import WebDriverManager
 from Baselib.logger_manager import setup_logger
 from Twitch_Proj.twitch_page import TwitchPage
-from Twitch_Proj.config import driver_setting, log_config
-import datetime
+from Twitch_Proj.config import driver_setting, log_config, \
+    current_folder_name, twitch_url, chrome_driver_path
 import time
 
+
 class TestTwitch:
-    now = datetime.datetime.now()
     logger = setup_logger(log_config, loggername="twitch_logger")
 
     @classmethod
     def setup_class(cls):
         cls.logger.info("Initial Test")
-        cls.wda = WebDriverManager(driver_setting)
+        cls.wda = WebDriverManager(
+            driver_setting, driver_path=chrome_driver_path)
         cls.driver = cls.wda.driver
-        cls.testpage = TwitchPage(cls.driver, cls.logger)
+        cls.testpage = TwitchPage(twitch_url, cls.driver, cls.logger)
         cls.logger.info(f"generate TwitchPage")
 
     @classmethod
@@ -29,7 +30,6 @@ class TestTwitch:
     def teardown_method(self, method):
         self.logger.info(f"----end {method.__name__} execution----")
 
-
     def test_go_to_twitch(self):
         self.testpage.get_twitch_page()
 
@@ -42,20 +42,17 @@ class TestTwitch:
 
     def test_scroll_down_2_times(self):
         for _ in range(2):
-            self.testpage.scroll_down(movepixels=800,wait_time=0)
+            self.testpage.scroll_down(movepixels=800, wait_time=0)
         time.sleep(2)
 
     def test_select_one_streamer(self):
-        self.testpage.accept_modal()
+        if self.testpage.accept_modal():
+            self.testpage.take_screenshot(
+                f"{current_folder_name}/modal.png")
+            self.testpage.click_accept_modal()
         self.testpage.click_streamer_in_top(1)
 
     def test_check_and_take_photo_the_streamer_page(self):
         self.testpage.wait_streamer_page_is_ready(timeout=20)
-        self.testpage.take_screenshot("StarCraftII_streamer.png")
-
-
-
-
-
-
-
+        self.testpage.take_screenshot(
+            f"{current_folder_name}/StarCraftII_streamer.png")
