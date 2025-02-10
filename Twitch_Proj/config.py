@@ -14,7 +14,7 @@ twitch_url = "https://m.twitch.tv"
 
 # Browser Driver
 # [Backup] when webdriver-manager couldn't install the latest chromedriver
-chrome_driver_path = r"c:/Users/paul/Desktop/openent/WAPTEST/Twitch_Proj/chromedriver.exe"
+chrome_driver_path = r"...../chromedriver.exe"
 
 driver_setting = {
     "url": "",
