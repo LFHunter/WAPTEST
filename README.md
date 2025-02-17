@@ -37,7 +37,7 @@ Run the application using the following command:
 
 ```bash
 export PYTHONPATH=/path/to/your_project
-pytest --html=MarketstackAPITest_Proj/report.html  MarketstackAPITest_Proj/Testcases/test_historical_api.py
+pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
 ```
 **Log**: Twitch_Proj/**%Y-%m-%d_%H%M_%S**_twitch.log  
   
