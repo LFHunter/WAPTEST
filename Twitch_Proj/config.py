@@ -14,7 +14,7 @@ twitch_url = "https://m.twitch.tv"
 
 # Browser Driver
 # [Backup] when webdriver-manager couldn't install the latest chromedriver
-chrome_driver_path = r"...../chromedriver.exe"
+chrome_driver_path = r"Twitch_Proj/chromedriver.exe"
 
 driver_setting = {
     "url": "",
@@ -48,19 +48,19 @@ log_config = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
-            'level': 'DEBUG'
+            'level': 'INFO'
         },
         'file': {
             'class': 'logging.FileHandler',
             'filename': f'{current_folder_name}/{formatted_now}_twitch.log',
             'formatter': 'standard',
-            'level': 'DEBUG'
+            'level': 'INFO'
         }
     },
     'loggers': {
         '': {  # '' means root logger
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False
         }
     }

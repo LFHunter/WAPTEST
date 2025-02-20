@@ -17,10 +17,10 @@ class TwitchPage(UILib):
     def get_twitch_page(self):
         try:
             self.driver.get(self.twitch_url)
-            self.logger.debug(f"Successfully get {self.twitch_url}")
+            self.logger.info(f"Successfully get {self.twitch_url}")
         except Exception as exp:
-            self.logger.debug(f"Exception:{exp}")
-            self.logger.debug(f"get {self.twitch_url} again")
+            self.logger.info(f"Exception:{exp}")
+            self.logger.info(f"get {self.twitch_url} again")
             self.driver.get(self.twitch_url)
         # self.wait_ele_visible(wa_locator.H1_warranty_intro, 5)
 
@@ -38,12 +38,12 @@ class TwitchPage(UILib):
         streamers = [tlocator.streamer1_within_channels_in_top_page,
                      tlocator.streamer2_within_channels_in_top_page,
                      tlocator.streamer3_within_channels_in_top_page]
-        self.click(streamers[streamer_order+1])
+        self.click(streamers[streamer_order-1])
 
     def check_streamer_page_is_loaded(self, timeout: int = 10):
         document_ready_state = self.driver.execute_script(
             "return document.readyState")
-        self.logger.debug(f"Current url : {self.driver.current_url}")
+        self.logger.info(f"Current url : {self.driver.current_url}")
         if document_ready_state == "complete":
             self.click(tlocator.SPAN_chatroom)
             video_element = self.wait_ele_visible(
@@ -55,10 +55,10 @@ class TwitchPage(UILib):
                 "return arguments[0].paused;", video_element)
 
             if ready_state == 4 and not paused:
-                self.logger.debug("The video is playing (or ready to play).")
+                self.logger.info("The video is playing (or ready to play).")
                 return True
             else:
-                self.logger.debug(
+                self.logger.info(
                     "The video is not fully loaded or is paused.")
         self.logger.debug("The website is not ready")
 
@@ -74,10 +74,13 @@ class TwitchPage(UILib):
     def accept_modal(self):
         try:
             ele = self.wait_ele_visible(tlocator.Text_modal)
-            self.logger.debug(f"Modal text:{ele.text}")
+            self.logger.info(f"Modal text:{ele.text}")
+            # For catch accept modal
+            import time
+            time.sleep(180)
             return True
         except:
-            self.logger.debug("No modal show")
+            self.logger.info("No modal show")
 
     def click_accept_modal(self):
         self.click(tlocator.BUTTON_modal_accept)

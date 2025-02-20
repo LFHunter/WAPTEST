@@ -1,13 +1,14 @@
 from Baselib.webdriver_manager import WebDriverManager
-from Baselib.logger_manager import setup_logger
 from Twitch_Proj.twitch_page import TwitchPage
-from Twitch_Proj.config import driver_setting, log_config, \
+from Twitch_Proj.config import driver_setting, \
     current_folder_name, twitch_url, chrome_driver_path
 import time
+import logging
 
 
 class TestTwitch:
-    logger = setup_logger(log_config, loggername="twitch_logger")
+
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def setup_class(cls):
