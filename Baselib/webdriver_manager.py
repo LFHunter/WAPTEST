@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import WebDriverException, InvalidSessionIdException, NoSuchWindowException
 
 
 class WebDriverManager:
@@ -35,9 +36,9 @@ class WebDriverManager:
             self.add_driver_setting_arguments(config)
             try:
                 service = ChromeService(ChromeDriverManager().install())
+                print("Try to launch driver by ChromeService")
                 self.driver = webdriver.Chrome(
                     service=service, options=self.browser_options)
-                print("erewrrwerwr")
             except SessionNotCreatedException as e:
                 print(e)
                 print(f"Due to ChromeDriverManager install driver fail, using\
@@ -52,17 +53,21 @@ class WebDriverManager:
             raise ValueError(f"Browser {config['browser']} doesn't exist !")
 
     def is_driver_alive(driver: webdriver) -> bool:
-        try:
-            _ = driver.current_url
-            return True
-        except Exception:
-            return False
+        if driver is not None:
+            try:
+                return driver.session_id and driver.window_handles
+            except Exception as e:
+                print(e)
+        return False
 
     def close_driver(self):
         n = 0
         while self.is_driver_alive():
-            n += 1
-            self.driver.quit()
             if n > 5:
-                print("Driver can't be closed")
-                break
+                raise Exception("Driver can't be closed")
+            n += 1
+            try:
+                if self.driver.session_id and self.driver.window_handles:
+                    self.driver.quit()
+            except (WebDriverException, InvalidSessionIdException, NoSuchWindowException) as e:
+                print(f"Unable to quit WebDriver - {e}")
