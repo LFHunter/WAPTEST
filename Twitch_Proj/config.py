@@ -54,13 +54,13 @@ log_config = {
             'class': 'logging.FileHandler',
             'filename': f'{current_folder_name}/{formatted_now}_twitch.log',
             'formatter': 'standard',
-            'level': 'DEBUG'
+            'level': 'INFO'
         }
     },
     'loggers': {
         '': {  # '' means root logger
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False
         }
     }
