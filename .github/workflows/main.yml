@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.5.0
+        uses: actions/checkout@v3   #actions/checkout@v3 代表 checkout Action 的 主要版本 v3
       - name: Setup Python
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.5.0  #v4（2023年發布）：支援 cache、更好的 Python 安裝流程
         with:
           python-version: "3.12"
       - name: Show workspace path
