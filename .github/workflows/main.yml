@@ -26,9 +26,20 @@ jobs:
         run: echo "Workspace is at $GITHUB_WORKSPACE"
       - name: Install Python Dependency
         run: pip3 install -r requirements.txt
+      - name: Export Path
+        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+      - name: Install Chrome and ChromeDriver
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i /tmp/google-chrome.deb || sudo apt-get -f install -y
+          wget -q -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/$(google-chrome --version | awk '{print $3}')/linux64/chromedriver-linux64.zip
+          unzip /tmp/chromedriver.zip -d /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver-linux64
+          sudo mv /usr/local/bin/chromedriver-linux64 /usr/local/bin/chromedriver
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
-          export PYTHONPATH=$GITHUB_WORKSPACE
           python3 --version
           pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github

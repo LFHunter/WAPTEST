@@ -29,7 +29,7 @@ driver_setting = {
         "--ignore-certificate-errors",
         "--disable-gpu",
         "--incognito"
-        # "--headless"
+        "--headless"
     ]
 }
 
