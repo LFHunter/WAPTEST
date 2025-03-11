@@ -31,7 +31,7 @@ jobs:
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
           python3 --version
-          python3 pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
+          pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         run: |
           git config --global user.name "LFHunter"
