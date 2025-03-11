@@ -65,7 +65,6 @@ jobs:
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
           python3 --version
-          pytest --help | grep github-actions
           pytest --tb=short --html=Twitch_Proj/report.html Twitch_Proj/Testcases/test_twitch.py || exit 1
         #continue-on-error: true
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
