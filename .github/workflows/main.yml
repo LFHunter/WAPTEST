@@ -7,8 +7,8 @@ on:
     branches: '*' # 只要有任何一個 commit 被 push，就會觸發此 action
   pull_request:
     branches: '*'
-  schedule:
-    - cron: "55 16 * * *"
+  # schedule:
+  #   - cron: "55 16 * * *"
   workflow_dispatch:  # 可以手動執行此 action
 
 # 預先定義此 action 要幹嘛
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3   #actions/checkout@v3 代表 checkout Action 的 主要版本 v3
+        with:
+          persist-credentials: false  # 停用內建的 GITHUB_TOKEN
       - name: Setup Python
         uses: actions/setup-python@v4.5.0  #v4（2023年發布）：支援 cache、更好的 Python 安裝流程
         with:
@@ -64,9 +66,14 @@ jobs:
           pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
         continue-on-error: true
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name "LFHunter"
-          git config --global user.email "magicryze@gmail.com"
+          git config --global user.name "github-actions[bot]" #設定 Git 使用者名稱 為 "github-actions[bot]"（這是 GitHub Actions 的官方機器人帳號）。
+          git config --global user.email "github-actions[bot]@users.noreply.github.com" #一個匿名 GitHub Email，避免洩露個人資訊。
           git add ./Twitch_Proj/report.html
-          git add ./Twitch_Proj/*.log && git commit -m "daily report and log"
-          git push origin main
+          git add ./Twitch_Proj/*.log 
+          git commit -m "daily report and log ,Automated commit from GitHub Actions"  || exit 0 # 防止沒有變更時出錯
+          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
+      
+      
