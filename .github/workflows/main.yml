@@ -67,5 +67,6 @@ jobs:
           continue-on-error: true
           git config --global user.name "LFHunter"
           git config --global user.email "magicryze@gmail.com"
-          git add ./Twitch_Proj/report.html && git commit -m "daily report"
+          git add ./Twitch_Proj/report.html
+          git add ./Twitch_Proj/*.log && git commit -m "daily report and log"
           git push origin main
