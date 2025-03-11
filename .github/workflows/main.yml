@@ -1,0 +1,38 @@
+name: Run UI Test
+run-name: Run UI Test
+
+# 觸發此 action 的時機
+on:
+  push:
+    branches: '*' # 只要有任何一個 commit 被 push，就會觸發此 action
+  pull_request:
+    branches: '*'
+  schedule:
+    - cron: "55 16 * * *"
+  workflow_dispatch:  # 可以手動執行此 action
+
+# 預先定義此 action 要幹嘛
+jobs:
+  Run_Twitch_UI_Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.5.0
+      - name: Setup Python
+        uses: actions/setup-python@v4.5.0
+        with:
+          python-version: "3.12"
+      - name: Show workspace path
+        run: echo "Workspace is at $GITHUB_WORKSPACE"
+      - name: Install Python Dependency
+        run: pip3 install -r requirements.txt
+      - name: Export Python Path
+        run: export PYTHONPATH=$GITHUB_WORKSPACE
+      - name: Run Twitch_Proj/Testcases/test_twitch.py
+        run: python pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
+      - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
+        run: |
+          git config --global user.name "LFHunter"
+          git config --global user.email "magicryze@gmail.com"
+          git add ./Twitch_Proj/report.html && git commit -m "daily report"
+          git push origin main
