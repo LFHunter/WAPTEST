@@ -70,6 +70,7 @@ jobs:
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
         run: |
           git config --global user.name "github-actions[bot]" #設定 Git 使用者名稱 為 "github-actions[bot]"（這是 GitHub Actions 的官方機器人帳號）。
           git config --global user.email "github-actions[bot]@users.noreply.github.com" #一個匿名 GitHub Email，避免洩露個人資訊。
