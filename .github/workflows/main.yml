@@ -66,6 +66,7 @@ jobs:
         run: |
           python3 --version
           pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
+          ls -al Twitch_Proj
         continue-on-error: true
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         env:
