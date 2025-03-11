@@ -60,11 +60,11 @@ jobs:
           sudo mv /usr/local/bin/chromedriver-linux64 /usr/
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
+          continue-on-error: true
           python3 --version
           pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         run: |
-          continue-on-error: true
           git config --global user.name "LFHunter"
           git config --global user.email "magicryze@gmail.com"
           git add ./Twitch_Proj/report.html
