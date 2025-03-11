@@ -28,7 +28,27 @@ jobs:
         run: pip3 install -r requirements.txt
       - name: Export Path
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-      - name: Install Chrome and ChromeDriver
+      - name: Check Current Chrome Version
+        id: check_chrome
+        run: |
+          if command -v google-chrome &> /dev/null; then
+            CURRENT_VERSION=$(google-chrome --version | awk '{print $3}')
+            LATEST_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+            echo "Current Chrome Version: $CURRENT_VERSION"
+            echo "Latest Chrome Version: $LATEST_VERSION"
+            if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+              echo "Chrome is up-to-date. Skipping installation."
+              echo "SKIP_CHROME_INSTALL=true" >> $GITHUB_ENV
+            else
+              echo "Chrome needs an update."
+              echo "SKIP_CHROME_INSTALL=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "Chrome is not installed. Installing..."
+            echo "SKIP_CHROME_INSTALL=false" >> $GITHUB_ENV
+          fi
+      - name: Install Chrome and ChromeDriver (if needed)
+        if: env.SKIP_CHROME_INSTALL == 'false'
         run: |
           sudo apt update
           sudo apt install -y wget unzip
@@ -37,13 +57,14 @@ jobs:
           wget -q -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/$(google-chrome --version | awk '{print $3}')/linux64/chromedriver-linux64.zip
           unzip /tmp/chromedriver.zip -d /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver-linux64
-          sudo mv /usr/local/bin/chromedriver-linux64 /usr/local/bin/chromedriver
+          sudo mv /usr/local/bin/chromedriver-linux64 /usr/
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
           python3 --version
           pytest --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         run: |
+          continue-on-error: true
           git config --global user.name "LFHunter"
           git config --global user.email "magicryze@gmail.com"
           git add ./Twitch_Proj/report.html && git commit -m "daily report"
