@@ -21,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3   #actions/checkout@v3 代表 checkout Action 的 主要版本 v3
         with:
+          fetch-depth: 0  # 允許完整拉取歷史，避免 rebase 失敗
           persist-credentials: false  # 停用內建的 GITHUB_TOKEN
       - name: Setup Python
         uses: actions/setup-python@v4.5.0  #v4（2023年發布）：支援 cache、更好的 Python 安裝流程
@@ -56,7 +57,7 @@ jobs:
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
           python3 --version
-          pytest --tb=short --html=Twitch_Proj/report.html --self-contained-html Twitch_Proj/Testcases/test_twitch.py || exit 1
+          pytest --tb=short --html=Twitch_Proj/report.html  Twitch_Proj/Testcases/test_twitch.py || exit 1
           echo "================="
       - name: Commit Data Back To GitHub Repo  # 將測試結果回傳到Github
         env:
@@ -68,6 +69,7 @@ jobs:
           git status
           git config --global user.name "github-actions[bot]" #設定 Git 使用者名稱 為 "github-actions[bot]"（這是 GitHub Actions 的官方機器人帳號）。
           git config --global user.email "github-actions[bot]@users.noreply.github.com" #一個匿名 GitHub Email，避免洩露個人資訊。
+          git pull --rebase origin main
           git add .
           git commit -m "daily report and log ,Automated commit from GitHub Actions"  || exit 0 # 防止沒有變更時出錯
           git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
