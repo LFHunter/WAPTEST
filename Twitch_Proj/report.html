@@ -3,11 +3,332 @@
   <head>
     <meta charset="utf-8"/>
     <title id="head-title">report.html</title>
-      <link href="assets/style.css" rel="stylesheet" type="text/css"/>
+      <style type="text/css">body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+#environment ul {
+  margin: 0;
+  padding: 0 20px;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+.col-links__extra {
+  margin-right: 3px;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.logwrapper {
+  max-height: 230px;
+  overflow-y: scroll;
+  background-color: #e6e6e6;
+}
+.logwrapper.expanded {
+  max-height: none;
+}
+.logwrapper.expanded .logexpander:after {
+  content: "collapse [-]";
+}
+.logwrapper .logexpander {
+  z-index: 1;
+  position: sticky;
+  top: 10px;
+  width: max-content;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin: 10px 0 10px calc(100% - 80px);
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+.logwrapper .logexpander:after {
+  content: "expand [+]";
+}
+.logwrapper .logexpander:hover {
+  color: #000;
+  border-color: #000;
+}
+.logwrapper .log {
+  min-height: 40px;
+  position: relative;
+  top: -50px;
+  height: calc(100% + 50px);
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  padding-right: 80px;
+  white-space: pre-wrap;
+}
+
+div.media {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin: 0 5px;
+  overflow: hidden;
+  width: 320px;
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  align-items: center;
+  flex: 1 1;
+  overflow: hidden;
+  height: 200px;
+}
+
+.media-container--fullscreen {
+  grid-template-columns: 0px auto 0px;
+}
+
+.media-container__nav--right,
+.media-container__nav--left {
+  text-align: center;
+  cursor: pointer;
+}
+
+.media-container__viewport {
+  cursor: pointer;
+  text-align: center;
+  height: inherit;
+}
+.media-container__viewport img,
+.media-container__viewport video {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+}
+
+.media__name,
+.media__counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 0 0 25px;
+  align-items: center;
+}
+
+.collapsible td:not(.col-links) {
+  cursor: pointer;
+}
+.collapsible td:not(.col-links):hover::after {
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.col-result {
+  width: 130px;
+}
+.col-result:hover::after {
+  content: " (hide details)";
+}
+
+.col-result.collapsed:hover::after {
+  content: " (show details)";
+}
+
+#environment-header h2:hover::after {
+  content: " (hide details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#environment-header.collapsed h2:hover::after {
+  content: " (show details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+.sortable.desc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: -12.5px;
+  border: 10px solid #4caf50;
+  border-bottom: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.sortable.asc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: 12.5px;
+  border: 10px solid #4caf50;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.hidden, .summary__reload__button.hidden {
+  display: none;
+}
+
+.summary__data {
+  flex: 0 0 550px;
+}
+.summary__reload {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+}
+.summary__reload__button {
+  flex: 0 0 300px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.summary__reload__button:hover {
+  background-color: #46a049;
+}
+.summary__spacer {
+  flex: 0 0 550px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  align-items: center;
+}
+.filters button,
+.collapse button {
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.filters button:hover,
+.collapse button:hover {
+  color: #ccc;
+}
+
+.filter__label {
+  margin-right: 10px;
+}
+
+      </style>
+    
   </head>
   <body>
     <h1 id="title">report.html</h1>
-    <p>Report generated on 12-Mar-2025 at 07:10:06 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+    <p>Report generated on 12-Mar-2025 at 07:21:23 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
         v4.1.1</p>
     <div id="environment-header">
       <h2>Environment</h2>
@@ -61,7 +382,7 @@
         <h2>Summary</h2>
         <div class="additional-summary prefix">
         </div>
-        <p class="run-count">6 tests took 00:00:39.</p>
+        <p class="run-count">6 tests took 00:00:49.</p>
         <p class="filter">(Un)check the boxes to filter the results.</p>
         <div class="summary__reload">
           <div class="summary__reload__button hidden" onclick="location.reload()">
@@ -71,10 +392,10 @@
         <div class="summary__spacer"></div>
         <div class="controls">
           <div class="filters">
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
-            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
+            <span class="failed">4 Failed,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
-            <span class="passed">6 Passed,</span>
+            <span class="passed">2 Passed,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
             <span class="skipped">0 Skipped,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
@@ -108,7 +429,7 @@
     </table>
   </body>
   <footer>
-    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.12.9&#34;, &#34;Platform&#34;: &#34;Linux-6.8.0-1021-azure-x86_64-with-glibc2.39&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.3.4&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;metadata&#34;: &#34;3.1.1&#34;, &#34;github-actions-annotate-failures&#34;: &#34;0.3.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;}, &#34;CI&#34;: &#34;true&#34;, &#34;JAVA_HOME&#34;: &#34;/usr/lib/jvm/temurin-17-jdk-amd64&#34;}, &#34;tests&#34;: {&#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&#34;, &#34;duration&#34;: &#34;00:00:04&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:04&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\nadd {&amp;#x27;intl.accept_languages&amp;#x27;: &amp;#x27;en-US&amp;#x27;}\nadd --ignore-certificate-errors\nadd --disable-gpu\nadd --incognito\nadd --headless\nadd experimental_option : mobileEmulation, {&amp;#x27;deviceName&amp;#x27;: &amp;#x27;iPhone 12 Pro&amp;#x27;} \nTry to launch driver by ChromeService\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:27 [INFO] test_twitch: Initial Test\n2025-03-12 07:09:27 [INFO] WDM: ====== WebDriver manager ======\n2025-03-12 07:09:28 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:09:28 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:09:28 [INFO] WDM: There is no [linux64] chromedriver &amp;quot;133.0.6943.141&amp;quot; for browser google-chrome &amp;quot;133.0.6943&amp;quot; in cache\n2025-03-12 07:09:28 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:09:28 [INFO] WDM: WebDriver version 133.0.6943.141 selected\n2025-03-12 07:09:28 [INFO] WDM: Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip\n2025-03-12 07:09:28 [INFO] WDM: About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip\n2025-03-12 07:09:28 [INFO] WDM: Driver downloading response is 200\n2025-03-12 07:09:28 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:09:28 [INFO] WDM: Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/133.0.6943.141]\n2025-03-12 07:09:28 [INFO] test_twitch: generate TwitchPage\n2025-03-12 07:09:28 [INFO] test_twitch: ----starting test_go_to_twitch execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:15 Initial Test\nINFO     WDM:logger.py:11 ====== WebDriver manager ======\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 There is no [linux64] chromedriver &amp;quot;133.0.6943.141&amp;quot; for browser google-chrome &amp;quot;133.0.6943&amp;quot; in cache\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 WebDriver version 133.0.6943.141 selected\nINFO     WDM:logger.py:11 Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip\nINFO     WDM:logger.py:11 About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip\nINFO     WDM:logger.py:11 Driver downloading response is 200\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/133.0.6943.141]\nINFO     test_twitch:test_twitch.py:20 generate TwitchPage\nINFO     test_twitch:test_twitch.py:29 ----starting test_go_to_twitch execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: Successfully get https://m.twitch.tv\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:20 Successfully get https://m.twitch.tv\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----end test_go_to_twitch execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_go_to_twitch execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&#34;, &#34;duration&#34;: &#34;185 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;185 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----starting test_click_search_icon execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_click_search_icon execution----\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----end test_click_search_icon execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_click_search_icon execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&#34;, &#34;duration&#34;: &#34;254 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;254 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----starting test_input_message_in_search_bar execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_input_message_in_search_bar execution----\n\n----------------------------- Captured stdout call -----------------------------\nsend_keys: (&amp;#x27;xpath&amp;#x27;, &amp;quot;//input[@type=&amp;#x27;search&amp;#x27;][1]&amp;quot;), timeout:10\nsend_keys: (&amp;#x27;xpath&amp;#x27;, &amp;quot;//input[@type=&amp;#x27;search&amp;#x27;][1]&amp;quot;), timeout:10\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----end test_input_message_in_search_bar execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_input_message_in_search_bar execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:31 [INFO] test_twitch: ----starting test_scroll_down_2_times execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_scroll_down_2_times execution----\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:33 [INFO] test_twitch: ----end test_scroll_down_2_times execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_scroll_down_2_times execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&#34;, &#34;duration&#34;: &#34;00:00:10&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:10&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:33 [INFO] test_twitch: ----starting test_select_one_streamer execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_select_one_streamer execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:09:44 [INFO] test_twitch: No modal show\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:83 No modal show\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:44 [INFO] test_twitch: ----end test_select_one_streamer execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_select_one_streamer execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&#34;, &#34;duration&#34;: &#34;00:00:22&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:22&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:09:44 [INFO] test_twitch: ----starting test_check_and_take_photo_the_streamer_page execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_check_and_take_photo_the_streamer_page execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:09:44 [INFO] test_twitch: Current url : https://m.twitch.tv/esl_sc2\n2025-03-12 07:09:45 [INFO] test_twitch: The video is not fully loaded or is paused.\n2025-03-12 07:09:55 [INFO] test_twitch: Current url : https://m.twitch.tv/esl_sc2\n2025-03-12 07:09:56 [INFO] test_twitch: The video is playing (or ready to play).\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:46 Current url : https://m.twitch.tv/esl_sc2\nINFO     test_twitch:twitch_page.py:61 The video is not fully loaded or is paused.\nINFO     test_twitch:twitch_page.py:46 Current url : https://m.twitch.tv/esl_sc2\nINFO     test_twitch:twitch_page.py:58 The video is playing (or ready to play).\n\n--------------------------- Captured stdout teardown ---------------------------\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:09:56 [INFO] test_twitch: ----end test_check_and_take_photo_the_streamer_page execution----\n2025-03-12 07:10:06 [INFO] test_twitch: End Test\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_check_and_take_photo_the_streamer_page execution----\nINFO     test_twitch:test_twitch.py:26 End Test&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.12.9&#34;, &#34;Platform&#34;: &#34;Linux-6.8.0-1021-azure-x86_64-with-glibc2.39&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.3.4&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;metadata&#34;: &#34;3.1.1&#34;, &#34;github-actions-annotate-failures&#34;: &#34;0.3.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;}, &#34;CI&#34;: &#34;true&#34;, &#34;JAVA_HOME&#34;: &#34;/usr/lib/jvm/temurin-17-jdk-amd64&#34;}, &#34;tests&#34;: {&#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&#34;, &#34;duration&#34;: &#34;00:00:04&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_go_to_twitch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:04&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\nadd {&amp;#x27;intl.accept_languages&amp;#x27;: &amp;#x27;en-US&amp;#x27;}\nadd --ignore-certificate-errors\nadd --disable-gpu\nadd --incognito\nadd --headless\nadd experimental_option : mobileEmulation, {&amp;#x27;deviceName&amp;#x27;: &amp;#x27;iPhone 12 Pro&amp;#x27;} \nTry to launch driver by ChromeService\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:20:34 [INFO] test_twitch: Initial Test\n2025-03-12 07:20:34 [INFO] WDM: ====== WebDriver manager ======\n2025-03-12 07:20:35 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:20:35 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:20:35 [INFO] WDM: There is no [linux64] chromedriver &amp;quot;134.0.6998.88&amp;quot; for browser google-chrome &amp;quot;134.0.6998&amp;quot; in cache\n2025-03-12 07:20:35 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:20:35 [INFO] WDM: WebDriver version 134.0.6998.88 selected\n2025-03-12 07:20:35 [INFO] WDM: Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/linux64/chromedriver-linux64.zip\n2025-03-12 07:20:35 [INFO] WDM: About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/linux64/chromedriver-linux64.zip\n2025-03-12 07:20:35 [INFO] WDM: Driver downloading response is 200\n2025-03-12 07:20:35 [INFO] WDM: Get LATEST chromedriver version for google-chrome\n2025-03-12 07:20:35 [INFO] WDM: Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/134.0.6998.88]\n2025-03-12 07:20:36 [INFO] test_twitch: generate TwitchPage\n2025-03-12 07:20:36 [INFO] test_twitch: ----starting test_go_to_twitch execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:15 Initial Test\nINFO     WDM:logger.py:11 ====== WebDriver manager ======\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 There is no [linux64] chromedriver &amp;quot;134.0.6998.88&amp;quot; for browser google-chrome &amp;quot;134.0.6998&amp;quot; in cache\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 WebDriver version 134.0.6998.88 selected\nINFO     WDM:logger.py:11 Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/linux64/chromedriver-linux64.zip\nINFO     WDM:logger.py:11 About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/linux64/chromedriver-linux64.zip\nINFO     WDM:logger.py:11 Driver downloading response is 200\nINFO     WDM:logger.py:11 Get LATEST chromedriver version for google-chrome\nINFO     WDM:logger.py:11 Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/134.0.6998.88]\nINFO     test_twitch:test_twitch.py:20 generate TwitchPage\nINFO     test_twitch:test_twitch.py:29 ----starting test_go_to_twitch execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:20:38 [INFO] test_twitch: Successfully get https://m.twitch.tv\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:20 Successfully get https://m.twitch.tv\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:20:38 [INFO] test_twitch: ----end test_go_to_twitch execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_go_to_twitch execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_click_search_icon&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py:38: in test_click_search_icon\n    self.testpage.click_browse_icon()\nTwitch_Proj/twitch_page.py:28: in click_browse_icon\n    self.click(tlocator.DIV_browse_icon)\nBaselib/ui_lib.py:33: in click\n    ele.click()\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:119: in click\n    self._execute(Command.CLICK_ELEMENT)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:570: in _execute\n    return self._parent.execute(command, params)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:429: in execute\n    self.error_handler.check_response(response)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response\n    raise exception_class(message, screen, stacktrace)\nE   selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element &amp;lt;div class=&amp;quot;ScFigure-sc-wkgzod-0 caxXaW tw-svg&amp;quot;&amp;gt;...&amp;lt;/div&amp;gt; is not clickable at point (147, 807). Other element would receive the click: &amp;lt;button class=&amp;quot;ScCoreButton-sc-ocjdkq-0 eWlfQB&amp;quot;&amp;gt;...&amp;lt;/button&amp;gt;\nE     (Session info: chrome=134.0.6998.35)\nE   Stacktrace:\nE   #0 0x55f41f686a1a &amp;lt;unknown&amp;gt;\nE   #1 0x55f41f13e390 &amp;lt;unknown&amp;gt;\nE   #2 0x55f41f196afc &amp;lt;unknown&amp;gt;\nE   #3 0x55f41f19495c &amp;lt;unknown&amp;gt;\nE   #4 0x55f41f191ff2 &amp;lt;unknown&amp;gt;\nE   #5 0x55f41f1916f0 &amp;lt;unknown&amp;gt;\nE   #6 0x55f41f183e0d &amp;lt;unknown&amp;gt;\nE   #7 0x55f41f1b5bd2 &amp;lt;unknown&amp;gt;\nE   #8 0x55f41f18378a &amp;lt;unknown&amp;gt;\nE   #9 0x55f41f1b5d9e &amp;lt;unknown&amp;gt;\nE   #10 0x55f41f1dc07b &amp;lt;unknown&amp;gt;\nE   #11 0x55f41f1b59a3 &amp;lt;unknown&amp;gt;\nE   #12 0x55f41f18160e &amp;lt;unknown&amp;gt;\nE   #13 0x55f41f182dd1 &amp;lt;unknown&amp;gt;\nE   #14 0x55f41f64cddb &amp;lt;unknown&amp;gt;\nE   #15 0x55f41f650cbc &amp;lt;unknown&amp;gt;\nE   #16 0x55f41f634392 &amp;lt;unknown&amp;gt;\nE   #17 0x55f41f651834 &amp;lt;unknown&amp;gt;\nE   #18 0x55f41f6181ef &amp;lt;unknown&amp;gt;\nE   #19 0x55f41f675038 &amp;lt;unknown&amp;gt;\nE   #20 0x55f41f675216 &amp;lt;unknown&amp;gt;\nE   #21 0x55f41f685896 &amp;lt;unknown&amp;gt;\nE   #22 0x7f44fc29caa4 &amp;lt;unknown&amp;gt;\nE   #23 0x7f44fc329c3c &amp;lt;unknown&amp;gt;\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:20:38 [INFO] test_twitch: ----starting test_click_search_icon execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_click_search_icon execution----\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:20:39 [INFO] test_twitch: ----end test_click_search_icon execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_click_search_icon execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&#34;, &#34;duration&#34;: &#34;00:00:10&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_input_message_in_search_bar&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:10&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py:41: in test_input_message_in_search_bar\n    self.testpage.input_text_in_searchbar(msg=&amp;quot;StarCraft II&amp;quot;)\nTwitch_Proj/twitch_page.py:31: in input_text_in_searchbar\n    self.send_keys(tlocator.INPUT_search_bar, msg=msg)\nBaselib/ui_lib.py:38: in send_keys\n    ele = self.wait_ele_clickable(locator, timeout=timeout)\nBaselib/ui_lib.py:26: in wait_ele_clickable\n    ele = WebDriverWait(self.driver, timeout).until(\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/support/wait.py:146: in until\n    raise TimeoutException(message, screen, stacktrace)\nE   selenium.common.exceptions.TimeoutException: Message: \nE   Stacktrace:\nE   #0 0x55f41f686a1a &amp;lt;unknown&amp;gt;\nE   #1 0x55f41f13e390 &amp;lt;unknown&amp;gt;\nE   #2 0x55f41f18fc85 &amp;lt;unknown&amp;gt;\nE   #3 0x55f41f18feb1 &amp;lt;unknown&amp;gt;\nE   #4 0x55f41f1ded64 &amp;lt;unknown&amp;gt;\nE   #5 0x55f41f1b5bfd &amp;lt;unknown&amp;gt;\nE   #6 0x55f41f1dc07b &amp;lt;unknown&amp;gt;\nE   #7 0x55f41f1b59a3 &amp;lt;unknown&amp;gt;\nE   #8 0x55f41f18160e &amp;lt;unknown&amp;gt;\nE   #9 0x55f41f182dd1 &amp;lt;unknown&amp;gt;\nE   #10 0x55f41f64cddb &amp;lt;unknown&amp;gt;\nE   #11 0x55f41f650cbc &amp;lt;unknown&amp;gt;\nE   #12 0x55f41f634392 &amp;lt;unknown&amp;gt;\nE   #13 0x55f41f651834 &amp;lt;unknown&amp;gt;\nE   #14 0x55f41f6181ef &amp;lt;unknown&amp;gt;\nE   #15 0x55f41f675038 &amp;lt;unknown&amp;gt;\nE   #16 0x55f41f675216 &amp;lt;unknown&amp;gt;\nE   #17 0x55f41f685896 &amp;lt;unknown&amp;gt;\nE   #18 0x7f44fc29caa4 &amp;lt;unknown&amp;gt;\nE   #19 0x7f44fc329c3c &amp;lt;unknown&amp;gt;\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:20:39 [INFO] test_twitch: ----starting test_input_message_in_search_bar execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_input_message_in_search_bar execution----\n\n----------------------------- Captured stdout call -----------------------------\nsend_keys: (&amp;#x27;xpath&amp;#x27;, &amp;quot;//input[@type=&amp;#x27;search&amp;#x27;][1]&amp;quot;), timeout:10\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:20:49 [INFO] test_twitch: ----end test_input_message_in_search_bar execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_input_message_in_search_bar execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_scroll_down_2_times&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:20:49 [INFO] test_twitch: ----starting test_scroll_down_2_times execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_scroll_down_2_times execution----\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:20:51 [INFO] test_twitch: ----end test_scroll_down_2_times execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_scroll_down_2_times execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&#34;, &#34;duration&#34;: &#34;00:00:11&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_select_one_streamer&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:11&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py:54: in test_select_one_streamer\n    self.testpage.click_streamer_in_top(1)\nTwitch_Proj/twitch_page.py:41: in click_streamer_in_top\n    self.click(streamers[streamer_order-1])\nBaselib/ui_lib.py:33: in click\n    ele.click()\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:119: in click\n    self._execute(Command.CLICK_ELEMENT)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:570: in _execute\n    return self._parent.execute(command, params)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:429: in execute\n    self.error_handler.check_response(response)\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response\n    raise exception_class(message, screen, stacktrace)\nE   selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (232, -21)\nE     (Session info: chrome=134.0.6998.35)\nE   Stacktrace:\nE   #0 0x55f41f686a1a &amp;lt;unknown&amp;gt;\nE   #1 0x55f41f13e390 &amp;lt;unknown&amp;gt;\nE   #2 0x55f41f196afc &amp;lt;unknown&amp;gt;\nE   #3 0x55f41f19495c &amp;lt;unknown&amp;gt;\nE   #4 0x55f41f191ff2 &amp;lt;unknown&amp;gt;\nE   #5 0x55f41f1916f0 &amp;lt;unknown&amp;gt;\nE   #6 0x55f41f183e0d &amp;lt;unknown&amp;gt;\nE   #7 0x55f41f1b5bd2 &amp;lt;unknown&amp;gt;\nE   #8 0x55f41f18378a &amp;lt;unknown&amp;gt;\nE   #9 0x55f41f1b5d9e &amp;lt;unknown&amp;gt;\nE   #10 0x55f41f1dc07b &amp;lt;unknown&amp;gt;\nE   #11 0x55f41f1b59a3 &amp;lt;unknown&amp;gt;\nE   #12 0x55f41f18160e &amp;lt;unknown&amp;gt;\nE   #13 0x55f41f182dd1 &amp;lt;unknown&amp;gt;\nE   #14 0x55f41f64cddb &amp;lt;unknown&amp;gt;\nE   #15 0x55f41f650cbc &amp;lt;unknown&amp;gt;\nE   #16 0x55f41f634392 &amp;lt;unknown&amp;gt;\nE   #17 0x55f41f651834 &amp;lt;unknown&amp;gt;\nE   #18 0x55f41f6181ef &amp;lt;unknown&amp;gt;\nE   #19 0x55f41f675038 &amp;lt;unknown&amp;gt;\nE   #20 0x55f41f675216 &amp;lt;unknown&amp;gt;\nE   #21 0x55f41f685896 &amp;lt;unknown&amp;gt;\nE   #22 0x7f44fc29caa4 &amp;lt;unknown&amp;gt;\nE   #23 0x7f44fc329c3c &amp;lt;unknown&amp;gt;\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:20:51 [INFO] test_twitch: ----starting test_select_one_streamer execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_select_one_streamer execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:21:02 [INFO] test_twitch: No modal show\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:83 No modal show\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:21:03 [INFO] test_twitch: ----end test_select_one_streamer execution----\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_select_one_streamer execution----&#34;}], &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&#34;, &#34;duration&#34;: &#34;00:00:20&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;Twitch_Proj/Testcases/test_twitch.py::TestTwitch::test_check_and_take_photo_the_streamer_page&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:20&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;Twitch_Proj/Testcases/test_twitch.py:57: in test_check_and_take_photo_the_streamer_page\n    self.testpage.wait_streamer_page_is_ready(timeout=20)\nTwitch_Proj/twitch_page.py:69: in wait_streamer_page_is_ready\n    if self.check_streamer_page_is_loaded():\nTwitch_Proj/twitch_page.py:48: in check_streamer_page_is_loaded\n    self.click(tlocator.SPAN_chatroom)\nBaselib/ui_lib.py:32: in click\n    ele = self.wait_ele_clickable(locator, timeout=timeout)\nBaselib/ui_lib.py:26: in wait_ele_clickable\n    ele = WebDriverWait(self.driver, timeout).until(\n/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/selenium/webdriver/support/wait.py:146: in until\n    raise TimeoutException(message, screen, stacktrace)\nE   selenium.common.exceptions.TimeoutException: Message: \nE   Stacktrace:\nE   #0 0x55f41f686a1a &amp;lt;unknown&amp;gt;\nE   #1 0x55f41f13e390 &amp;lt;unknown&amp;gt;\nE   #2 0x55f41f18fc85 &amp;lt;unknown&amp;gt;\nE   #3 0x55f41f18feb1 &amp;lt;unknown&amp;gt;\nE   #4 0x55f41f1ded64 &amp;lt;unknown&amp;gt;\nE   #5 0x55f41f1b5bfd &amp;lt;unknown&amp;gt;\nE   #6 0x55f41f1dc07b &amp;lt;unknown&amp;gt;\nE   #7 0x55f41f1b59a3 &amp;lt;unknown&amp;gt;\nE   #8 0x55f41f18160e &amp;lt;unknown&amp;gt;\nE   #9 0x55f41f182dd1 &amp;lt;unknown&amp;gt;\nE   #10 0x55f41f64cddb &amp;lt;unknown&amp;gt;\nE   #11 0x55f41f650cbc &amp;lt;unknown&amp;gt;\nE   #12 0x55f41f634392 &amp;lt;unknown&amp;gt;\nE   #13 0x55f41f651834 &amp;lt;unknown&amp;gt;\nE   #14 0x55f41f6181ef &amp;lt;unknown&amp;gt;\nE   #15 0x55f41f675038 &amp;lt;unknown&amp;gt;\nE   #16 0x55f41f675216 &amp;lt;unknown&amp;gt;\nE   #17 0x55f41f685896 &amp;lt;unknown&amp;gt;\nE   #18 0x7f44fc29caa4 &amp;lt;unknown&amp;gt;\nE   #19 0x7f44fc329c3c &amp;lt;unknown&amp;gt;\n\n---------------------------- Captured stderr setup -----------------------------\n2025-03-12 07:21:03 [INFO] test_twitch: ----starting test_check_and_take_photo_the_streamer_page execution----\n\n------------------------------ Captured log setup ------------------------------\nINFO     test_twitch:test_twitch.py:29 ----starting test_check_and_take_photo_the_streamer_page execution----\n\n----------------------------- Captured stderr call -----------------------------\n2025-03-12 07:21:03 [INFO] test_twitch: Current url : https://m.twitch.tv/\n\n------------------------------ Captured log call -------------------------------\nINFO     test_twitch:twitch_page.py:46 Current url : https://m.twitch.tv/\n\n--------------------------- Captured stdout teardown ---------------------------\n&amp;#x27;WebDriverManager&amp;#x27; object has no attribute &amp;#x27;session_id&amp;#x27;\n\n--------------------------- Captured stderr teardown ---------------------------\n2025-03-12 07:21:13 [INFO] test_twitch: ----end test_check_and_take_photo_the_streamer_page execution----\n2025-03-12 07:21:23 [INFO] test_twitch: End Test\n\n---------------------------- Captured log teardown -----------------------------\nINFO     test_twitch:test_twitch.py:32 ----end test_check_and_take_photo_the_streamer_page execution----\nINFO     test_twitch:test_twitch.py:26 End Test&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
     <script>
       (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
