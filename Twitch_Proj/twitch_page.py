@@ -24,7 +24,7 @@ class TwitchPage(UILib):
             self.driver.get(self.twitch_url)
 
     def click_browse_icon(self):
-        self.click(tlocator.DIV_browse_icon)
+        self.click(tlocator.DIV_browse_icon, timeout=30)
 
     def input_text_in_searchbar(self, msg: str):
         self.send_keys(tlocator.INPUT_search_bar, msg=msg)
