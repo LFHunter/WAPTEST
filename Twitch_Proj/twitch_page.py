@@ -22,7 +22,6 @@ class TwitchPage(UILib):
             self.logger.info(f"Exception:{exp}")
             self.logger.info(f"get {self.twitch_url} again")
             self.driver.get(self.twitch_url)
-        # self.wait_ele_visible(wa_locator.H1_warranty_intro, 5)
 
     def click_browse_icon(self):
         self.click(tlocator.DIV_browse_icon)
