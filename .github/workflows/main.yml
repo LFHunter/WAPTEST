@@ -32,36 +32,27 @@ jobs:
         run: pip3 install -r requirements.txt
       - name: Export Path
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-      - name: Check Current Chrome Version
-        id: check_chrome
+      - name: Check if ChromeDriver exists
+        id: check_chromedriver
         run: |
-          if command -v google-chrome &> /dev/null; then
-            CURRENT_VERSION=$(google-chrome --version | awk '{print $3}')
-            LATEST_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-            echo "Current Chrome Version: $CURRENT_VERSION"
-            echo "Latest Chrome Version: $LATEST_VERSION"
-            if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
-              echo "Chrome is up-to-date. Skipping installation."
-              echo "SKIP_CHROME_INSTALL=true" >> $GITHUB_ENV
-            else
-              echo "Chrome needs an update."
-              echo "SKIP_CHROME_INSTALL=false" >> $GITHUB_ENV
-            fi
+          if command -v chromedriver &> /dev/null
+          then
+            echo "ChromeDriver exists"
+            echo "exists=true" >> $GITHUB_ENV
           else
-            echo "Chrome is not installed. Installing..."
-            echo "SKIP_CHROME_INSTALL=false" >> $GITHUB_ENV
+            echo "ChromeDriver not found"
+            echo "exists=false" >> $GITHUB_ENV
           fi
-      - name: Install Chrome and ChromeDriver (if needed)
-        if: env.SKIP_CHROME_INSTALL == 'false'
+
+      - name: Install ChromeDriver if not found
+        if: env.exists == 'false'
         run: |
           sudo apt update
-          sudo apt install -y wget unzip
-          wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i /tmp/google-chrome.deb || sudo apt-get -f install -y
-          wget -q -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/$(google-chrome --version | awk '{print $3}')/linux64/chromedriver-linux64.zip
-          unzip /tmp/chromedriver.zip -d /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver-linux64
-          sudo mv /usr/local/bin/chromedriver-linux64 /usr/
+          sudo apt install -y chromium-chromedriver
+
+      - name: Verify ChromeDriver installation
+        run: |
+          chromedriver --version
       - name: Run Twitch_Proj/Testcases/test_twitch.py
         run: |
           python3 --version
