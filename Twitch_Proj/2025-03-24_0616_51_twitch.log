@@ -1,0 +1,29 @@
+2025-03-24 06:16:51 [INFO] test_twitch: Initial Test
+2025-03-24 06:16:51 [INFO] WDM: ====== WebDriver manager ======
+2025-03-24 06:16:51 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2025-03-24 06:16:51 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2025-03-24 06:16:51 [INFO] WDM: There is no [linux64] chromedriver "134.0.6998.165" for browser google-chrome "134.0.6998" in cache
+2025-03-24 06:16:51 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2025-03-24 06:16:51 [INFO] WDM: WebDriver version 134.0.6998.165 selected
+2025-03-24 06:16:52 [INFO] WDM: Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip
+2025-03-24 06:16:52 [INFO] WDM: About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip
+2025-03-24 06:16:52 [INFO] WDM: Driver downloading response is 200
+2025-03-24 06:16:52 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2025-03-24 06:16:52 [INFO] WDM: Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/134.0.6998.165]
+2025-03-24 06:16:52 [INFO] test_twitch: generate TwitchPage
+2025-03-24 06:16:52 [INFO] test_twitch: ----starting test_1_go_to_twitch execution----
+2025-03-24 06:16:54 [INFO] test_twitch: Successfully get https://m.twitch.tv
+2025-03-24 06:16:54 [INFO] test_twitch: ----end test_1_go_to_twitch execution----
+2025-03-24 06:16:54 [INFO] test_twitch: ----starting test_2_click_search_icon execution----
+2025-03-24 06:16:56 [INFO] test_twitch: ----end test_2_click_search_icon execution----
+2025-03-24 06:16:56 [INFO] test_twitch: ----starting test_3_input_message_in_search_bar execution----
+2025-03-24 06:17:06 [INFO] test_twitch: ----end test_3_input_message_in_search_bar execution----
+2025-03-24 06:17:06 [INFO] test_twitch: ----starting test_4_scroll_down_2_times execution----
+2025-03-24 06:17:08 [INFO] test_twitch: ----end test_4_scroll_down_2_times execution----
+2025-03-24 06:17:08 [INFO] test_twitch: ----starting test_5_select_one_streamer execution----
+2025-03-24 06:17:19 [INFO] test_twitch: No modal show
+2025-03-24 06:17:20 [INFO] test_twitch: ----end test_5_select_one_streamer execution----
+2025-03-24 06:17:20 [INFO] test_twitch: ----starting test_6_check_and_take_photo_the_streamer_page execution----
+2025-03-24 06:17:20 [INFO] test_twitch: Current url : https://m.twitch.tv/
+2025-03-24 06:17:30 [INFO] test_twitch: ----end test_6_check_and_take_photo_the_streamer_page execution----
+2025-03-24 06:17:40 [INFO] test_twitch: End Test
