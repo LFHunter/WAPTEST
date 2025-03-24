@@ -69,9 +69,8 @@ jobs:
           git status
           git config --global user.name "github-actions[bot]" #設定 Git 使用者名稱 為 "github-actions[bot]"（這是 GitHub Actions 的官方機器人帳號）。
           git config --global user.email "github-actions[bot]@users.noreply.github.com" #一個匿名 GitHub Email，避免洩露個人資訊。
-          git add .
+          git add -A
           git commit -m "daily report and log ,Automated commit from GitHub Actions"  || exit 0 # 防止沒有變更時出錯
-          git pull --rebase origin main
-          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
+          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git -f
 
 
